@@ -1,0 +1,67 @@
+name: Build for x86_64 and aarch64
+
+on:
+  push:
+    branches: [ "master" ]
+    paths:
+      - '.github/workflows/build.yaml'
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+  pull_request:
+    branches: [ "master" ]
+    paths:
+      - '.github/workflows/build.yaml'
+      - '**/*.go'
+      - 'go.mod'
+      - 'go.sum'
+
+jobs:
+  build-x86_64:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+      - name: Install dependencies and build
+        env:
+          GOOS: linux
+          GOARCH: amd64
+          CGO_ENABLED: 0
+        run: |
+            go get .
+            go build -ldflags="-extldflags "-static" -s -w" -v -o pkyu-x86_64
+      - name: Generate checksums
+        run: sha512sum ./pkyu-x86_64 > ./pkyu-x86_64.sha512sum
+      - name: Upload release files
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkyu-x86_64
+          path: |
+            pkyu-x86_64
+            pkyu-x86_64.sha512sum
+  build-aarch64:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+      - name: Install dependencies and build
+        env:
+          GOOS: linux
+          GOARCH: arm64
+          CGO_ENABLED: 0
+        run: |
+            go get .
+            go build -ldflags="-extldflags "-static" -s -w" -v -o pkyu-aarch64
+      - name: Generate checksums
+        run: sha512sum ./pkyu-aarch64 > ./pkyu-aarch64.sha512sum
+      - name: Upload release files
+        uses: actions/upload-artifact@v4
+        with:
+          name: pkyu-aarch64
+          path: |
+            pkyu-aarch64
+            pkyu-aarch64.sha512sum
