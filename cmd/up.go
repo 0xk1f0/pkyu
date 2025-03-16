@@ -49,6 +49,10 @@ var upCmd = &cobra.Command{
 			passCommands = append(passCommands, "--replace")
 		}
 
+		if !internal.BinaryExists("podman") {
+			internal.ExitError("podman unavailable in $PATH", 1)
+		}
+
 		var fullExec = append([]string{"podman", "kube", "play"}, append(passCommands, kubeFilePath)...)
 		if msg, exitCode, err := internal.RunCommand(fullExec...).Single(); err != nil {
 			internal.ExitError(msg, exitCode)

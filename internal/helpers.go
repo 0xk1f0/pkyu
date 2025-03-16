@@ -42,13 +42,12 @@ func ExitError(message any, code int) {
 	os.Exit(code)
 }
 
-func BinaryExists(name string) (bool, error) {
+func BinaryExists(name string) bool {
 	for range strings.SplitSeq(os.Getenv("PATH"), ":") {
 		path, err := exec.LookPath(name)
 		if err == nil && path != "" {
-			return true, nil
+			return true
 		}
-		return false, fmt.Errorf("could not search $PATH for %s: %v", name, err)
 	}
-	return false, nil
+	return false
 }

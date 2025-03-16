@@ -17,9 +17,9 @@ var rootCmd = &cobra.Command{
 	Version: "0.1.0",
 	Run: func(cmd *cobra.Command, args []string) {
 		if showVersion {
-		    fmt.Println("pkyu 0.1.0")
+			fmt.Println("pkyu 0.1.0")
 		} else {
-		    cmd.Help()
+			cmd.Help()
 		}
 	},
 }
@@ -30,6 +30,6 @@ func init() {
 
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-	    internal.ExitError(err, 1)
+		internal.ExitError(err, 1)
 	}
 }

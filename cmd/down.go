@@ -27,14 +27,16 @@ var downCmd = &cobra.Command{
 			kubeFilePath string
 		)
 
-		kubeFilePath, err = filepath.Abs(args[0])
-		if err != nil {
+		if kubeFilePath, err = filepath.Abs(args[0]); err != nil {
 			internal.ExitError(err, 1)
 		}
 
-		_, err = internal.ReadKubefile(kubeFilePath)
-		if err != nil {
+		if _, err = internal.ReadKubefile(kubeFilePath); err != nil {
 			internal.ExitError(err, 1)
+		}
+
+		if !internal.BinaryExists("podman") {
+			internal.ExitError("podman unavailable in $PATH", 1)
 		}
 
 		if msg, exitCode, err := internal.RunCommand("podman", "kube", "down", kubeFilePath).Single(); err != nil {
