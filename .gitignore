@@ -1,0 +1,6 @@
+# IDE-specific files and directories
+.idea/
+.vscode/
+
+# podman kube yaml files
+*.yaml
