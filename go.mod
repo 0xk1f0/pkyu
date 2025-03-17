@@ -3,7 +3,7 @@ module pkyu
 go 1.24.0
 
 require (
-	github.com/goccy/go-yaml v1.15.23
+	github.com/goccy/go-yaml v1.16.0
 	github.com/spf13/cobra v1.9.1
 )
 
